@@ -3,9 +3,9 @@
 #include <PubSubClient.h>
 #include "WebOTA.h"
 
-const char* ssid = "lallinger";
-const char* password = "Fritz9.3.1990";
-const char* mqtt_server = "192.168.0.210";
+const char* ssid = "<ssid>";
+const char* password = "<password>";
+const char* mqtt_server = "<server>";
 
 const char* clientId = "Buzzer01";
 
@@ -24,6 +24,7 @@ long lastMsg = 0;
 unsigned int cnt = 0;
 unsigned int cmdcnt = 0;
 int active=0;
+int first=1;
 char buf [5];
 
 /********************************************************
@@ -161,6 +162,13 @@ void reconnect() {
       strcpy(msg,clientId);
       strcat(msg,"/outTopic/IP");
       client.publish(msg, WiFi.localIP().toString().c_str());
+      if (first==1){
+        strcpy(msg,clientId);
+        strcat(msg,"/outTopic/state");
+        strcpy(buf,"off");
+        client.publish(msg, buf);
+        first=0;
+      }
       // ... and resubscribe
       strcpy(msg,clientId);
       strcat(msg,"/inTopic");
@@ -190,16 +198,15 @@ void setup() {
   client.setCallback(callback);
 }
 
+
 void loop() {
   // put your main code here, to run repeatedly:
-  if (digitalRead(togglePin) == LOW){
-    if (active==1){
+  if (digitalRead(togglePin)==LOW && active==1){
       active=0;
       strcpy(msg,clientId);
       strcat(msg,"/outTopic/state");
       strcpy(buf,"off");
       client.publish(msg, buf);
-    }
   }
   if (active==1){
    tone(buzzPin, frequency);
