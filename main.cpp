@@ -125,6 +125,20 @@ void callback(char* topic, byte* payload, unsigned int length) {
     frequency=128;
     timeOn=1000;
   }
+  if (payload[0] == 'E') {
+    Serial.println("Action triggered E");
+    active=1;
+    frequency=852;
+    timeOn=100;
+    timeOff=100;
+  }
+  if (payload[0] == 'F') {
+    Serial.println("Action triggered F");
+    active=1;
+    frequency=528;
+    timeOn=1000;
+    timeOff=30;
+  }
   strcpy(msg,clientId);
   strcat(msg,"/outTopic/cmdcount");
   sprintf (buf, "%i", cmdcnt);
