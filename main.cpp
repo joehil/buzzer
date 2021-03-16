@@ -14,6 +14,7 @@ int buzzPin=5;
 int togglePin=4;
 int timeOn=1000; //specified in milliseconds
 int timeOff=1000; //specified in millisecods
+int cntAlarm=90; //limit of alarm incidents
 
 WiFiClient espClient;
 PubSubClient client(espClient);
@@ -23,6 +24,7 @@ char msg[50];
 long lastMsg = 0;
 unsigned int cnt = 0;
 unsigned int cmdcnt = 0;
+unsigned int alarmcnt = 0;
 int active=0;
 int first=1;
 char buf [5];
@@ -227,6 +229,15 @@ void loop() {
    delay(timeOn);
    noTone(buzzPin);
    delay(timeOff);
+  }
+     
+  if (alarmcnt > cntAlarm){
+    alarmcnt=0;
+    active=0;
+    strcpy(msg,clientId);
+    strcat(msg,"/outTopic/state");
+    strcpy(buf,"off");
+    client.publish(msg, buf);
   }
 
   char buf [5];
