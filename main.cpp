@@ -110,22 +110,26 @@ void callback(char* topic, byte* payload, unsigned int length) {
     active=1;
     frequency=432;
     timeOn=400;
+    timeOff=1000;
   }
   if (payload[0] == 'B') {
     Serial.println("Action triggered B");
     active=0;
+    alarmcnt=0;
   }
   if (payload[0] == 'C') {
     Serial.println("Action triggered C");
     active=1;
     frequency=432;
     timeOn=400;
+    timeOff=1000;
   }
   if (payload[0] == 'D') {
     Serial.println("Action triggered D");
     active=1;
     frequency=128;
     timeOn=1000;
+    timeOff=1000;
   }
   if (payload[0] == 'E') {
     Serial.println("Action triggered E");
@@ -219,6 +223,7 @@ void loop() {
   // put your main code here, to run repeatedly:
   if (digitalRead(togglePin)==LOW && active==1){
       active=0;
+      alarmcnt=0;
       strcpy(msg,clientId);
       strcat(msg,"/outTopic/state");
       strcpy(buf,"off");
@@ -229,8 +234,9 @@ void loop() {
    delay(timeOn);
    noTone(buzzPin);
    delay(timeOff);
+   alarmcnt++;
   }
-     
+
   if (alarmcnt > cntAlarm){
     alarmcnt=0;
     active=0;
