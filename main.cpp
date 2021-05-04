@@ -3,9 +3,9 @@
 #include <PubSubClient.h>
 #include "WebOTA.h"
 
-const char* ssid = "<ssid>";
-const char* password = "<password>";
-const char* mqtt_server = "<server>";
+const char* ssid = "lallinger";
+const char* password = "Fritz9.3.1990";
+const char* mqtt_server = "192.168.0.210";
 
 const char* clientId = "Buzzer01";
 
@@ -76,6 +76,7 @@ void setup_wifi() {
   int loopcnt = 0;
   delay(10);
   // We start by connecting to a WiFi network
+  Serial.begin(9600);
   Serial.println();
   Serial.print("Connecting to ");
   Serial.println(ssid);
